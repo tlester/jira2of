@@ -1,10 +1,12 @@
-import subprocess
-import os
-import shutil
-import sys
-import re
-import httplib
-import urllib
-import urllib2
+import requests
 
-# Call jira_wget.sh, then read in file from /tmp/jira.json.  From there parse the json.
+with requests.Session() as c:
+	url = 'https://jira.oraclecorp.com/jira'
+	USERNAME = 'tom.lester@oracle.com'
+	PASSWORD = 'XXXXXXX'
+	sso_url = c.get(url)
+	print 'SSO_URL is: ' + sso_url.url
+	login_data = dict(ssousername=USERNAME, password=PASSWORD)
+	c.post(url, data=login_data)
+	json_page = c.get('https://jira.oraclecorp.com/jira/rest/api/2/search?jql=assignee%20=%20currentUser()%20AND%20status%20not%20in%20(Closed,%20Resolved)')
+	print json_page.content
