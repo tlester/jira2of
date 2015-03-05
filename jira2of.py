@@ -11,7 +11,7 @@ import re
 ### Variables
 
 SSO_USERNAME = 'tom.lester@oracle.com'
-SSO_PASSWORD = 'TurTl3!!'
+SSO_PASSWORD = 'xxxxx'
 
 # Path to wget command
 WGET = '/usr/local/bin/wget'
