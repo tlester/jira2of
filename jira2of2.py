@@ -11,7 +11,7 @@ with requests.Session() as c:
 	url = 'https://jira.oraclecorp.com'
 	url_sso_success = 'https://jira.oraclecorp.com/osso_login_success'
 	USERNAME = 'tom.lester@oracle.com'
-	PASSWORD = 'TurTl3!!'
+	PASSWORD = 'xxxxxx'
 	sso = c.post(url, verify=False, allow_redirects=True)
 	site2pstoretoken = sso.url.split('=')[1]
 	sso_url = sso.url.split(':443')[0] + ':443/sso/auth'
