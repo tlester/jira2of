@@ -7,11 +7,12 @@ import sys
 import os
 import subprocess
 import re
+import json
 
 ### Variables
 
 SSO_USERNAME = 'tom.lester@oracle.com'
-SSO_PASSWORD = 'xxxxx'
+SSO_PASSWORD = ''
 
 # Path to wget command
 WGET = '/usr/local/bin/wget'
@@ -29,6 +30,7 @@ OUTPUT_DIR = '/tmp'
 
 # Base URL's
 jira_base_url = 'https://jira.oraclecorp.com/jira'
+jira_rest_url = 'https://jira.oraclecorp.com/jira/rest/api/2/search?jql=assignee%20=%20currentUser()%20AND%20status%20not%20in%20(Closed,%20Resolved,%20Done)'
 
 if not SSO_PASSWORD:
 	sys.exit('Please edit script and set SSO_PASSWORD')
@@ -54,11 +56,18 @@ AUTH_DATA = 'ssousername=' + SSO_USERNAME + '&password=' + SSO_PASSWORD + '&site
 
 WGET_SSO_LOGIN = WGET + ' --no-check-certificate --user-agent="Mozilla/5.0" --secure-protocol=auto --post-data "' + AUTH_DATA + '" --save-cookies=' + \
 COOKIE_FILE + ' --keep-session-cookies ' + SSO_SERVER + ' -O sso.out >> ' + LOGFILE + ' 2>&1'
-print WGET_SSO_LOGIN
 
 p = subprocess.Popen(WGET_SSO_LOGIN, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 (out, err) = p.communicate()
 
-#for line in out.split('\n'):
-#	line = line.rstrip()
-#	print line
+WGET_JIRA_REST = WGET + ' --no-check-certificate --user-agent="Mozilla/5.0" --load-cookies=' + \
+COOKIE_FILE + ' --save-cookies=' + COOKIE_FILE + ' --keep-session-cookies "' + jira_rest_url + '" -O -' 
+
+p = subprocess.Popen(WGET_JIRA_REST, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+(out, err) = p.communicate()
+
+jsondata = json.loads(out)
+ 
+for issue in jsondata['issues']:
+#	print issue['key'] + issue['assignee']
+	print issue.get('key'), issue.get('fields').get('summary')
