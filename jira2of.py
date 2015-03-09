@@ -8,6 +8,8 @@ import os
 import subprocess
 import re
 import json
+import urllib
+import urllib2
 
 ### Variables
 
@@ -69,5 +71,7 @@ p = subprocess.Popen(WGET_JIRA_REST, stdout=subprocess.PIPE, stderr=subprocess.P
 jsondata = json.loads(out)
  
 for issue in jsondata['issues']:
-#	print issue['key'] + issue['assignee']
+	#print issue['key'] + issue['assignee']
 	print issue.get('key'), issue.get('fields').get('summary')
+	#print issue
+
