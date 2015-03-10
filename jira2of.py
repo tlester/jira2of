@@ -4,13 +4,20 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 import sys
-import os
-import subprocess
 import re
 import json
 import urllib
 import urllib2
-import cookielib
+
+#######  CHANGES  ######
+##
+## - Read username and password from file
+## - Breakdown the jira_rest_url so that the jql is read as a parameter
+##   and set the query as a variable
+## - Define a function for the authentication and API/URL processing
+##   alter the code to call the fucntion.  
+##
+############################
 
 ### Variables
 
